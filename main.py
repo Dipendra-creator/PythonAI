@@ -3,10 +3,9 @@ import webbrowser as wb
 import pyttsx3
 import speech_recognition as sr
 import datetime
-import requests
 import os
 import wikipedia
-
+import timeit
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -27,7 +26,6 @@ def wishMe():
     else:
         speak("Good Night!")
     speak("My Name is Friday, I am Your Personal Assistant")
-    speak("If You Want some Help then please say Friday Help!")
 
 
 def monthname(x):
@@ -69,11 +67,12 @@ def sendEmail(to, content):
 
 
 def takeCommand():
-    r = sr.Recognizer()
+    r = sr.()
     with sr.Microphone() as source:
         print("Listening...")
         r.pause_threshold = 1
         audio = r.listen(source)
+
 
     try:
         print("Recognizing...")
@@ -89,26 +88,19 @@ def takeCommand():
 
 
 if __name__ == "__main__":
-    count = 0
     wishMe()
     while True:
         query = takeCommand().lower()
-
-        if 'wake up friday' in query:
-            if count >= 1:
-                speak('What next?')
-            else:
-                speak('Always there for you Sir! How can I help You?')
-            count += 1
-
+        if 'hello' in query:
+            speak("Hello! What's your Good Name")
+            name = takeCommand()
+            speak("Hello "+name+" Welcome to our AI, we are continuously working on it. Hope You like it!")
         elif 'wikipedia' in query:
             speak('Searching Wikipedia...')
             query = query.replace("wikipedia", "")
             results = wikipedia.summary(query, sentences=2)
-            speak("According to Wikipedia")
-            print(results)
+            speak("According to Wikipedia!")
             speak(results)
-
         elif 'search in chrome' in query:
             speak("what should i search?")
             chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'  # Add the Location of the chrome browser
@@ -121,23 +113,33 @@ if __name__ == "__main__":
                 print("done")
             try:
                 text = r.recognize_google(audio)
-                if 'open music' in text:
-                    text = 'https://www.youtube.com/watch?v=JGwWNGJdvx8&list=RDJGwWNGJdvx8&start_radio=1'
-                    speak('Opening Youtube Music List')
-                    wb.get(chrome_path).open(text)
-                else:
-                    print('google think you said:\n' + text + '.com')
-                    wb.get(chrome_path).open(text + '.com')
+                print('google think you said:\n' + text + '.com')
+                wb.get(chrome_path).open(text + '.com')
             except Exception as e:
                 print(e)
-
-        elif 'how is the weather' and 'weather' in query:
-            api_address = 'http://api.openweathermap.org/data/2.5/weather?appid=0c42f7f6b53b244c78a418f4f181282a&q='
-            city = input('City Name :')
-            url = api_address + city
-            json_data = requests.get(url).json()
-            format_add = json_data['base']
-            print(format_add)
+        # elif 'how is the weather' and 'weather' in query:
+        #
+        #         url = 'https://api.openweathermap.org/'  # Open api link here
+        #
+        #         res = requests.get(url)
+        #
+        #         data = res.json()
+        #
+        #         weather = data['weather'][0]['main']
+        #         temp = data['main']['temp']
+        #         wind_speed = data['wind']['speed']
+        #
+        #         latitude = data['coord']['lat']
+        #         longitude = data['coord']['lon']
+        #
+        #         description = data['weather'][0]['description']
+        #         speak('Temperature : {} degree celcius'.format(temp))
+        #         print('Wind Speed : {} m/s'.format(wind_speed))
+        #         print('Latitude : {}'.format(latitude))
+        #         print('Longitude : {}'.format(longitude))
+        #         print('Description : {}'.format(description))
+        #         print('weather is: {} '.format(weather))
+        #         speak('weather is : {} '.format(weather))
 
         elif 'the time' in query:
             strTime = datetime.datetime.now().strftime("%I:%M:%S")
@@ -151,25 +153,9 @@ if __name__ == "__main__":
             speak(date)
             speak(monthname(month))
             speak(year)
-
-        elif 'email to harry' and 'send email' in query:
-            try:
-                speak("What should I say?")
-                content = takeCommand()
-                to = "ReciversEmail@gmail.com"
-                sendEmail(to, content)
-                speak("Email has been sent!")
-            except Exception as e:
-                print(e)
-                speak("Sorry my friend . I am not able to send this email")
-
-        elif 'open code' in query:
-            codePath = "C:\\Users\\user account\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"  # ADD THE PATH OF THE PROGEM HERE
-            os.startfile(codePath)
-
-        elif 'dance' in query:
-            speak("Get Lost! Otherwise i wil kick your ASS.")
-
-        elif 'go offline' in query:
-            speak("ok sir shutting down the system")
-            quit()
+        elif 'open music' in query:
+            music_dir = 'https://www.youtube.com/watch?v=JGwWNGJdvx8&list=RDJGwWNGJdvx8&start_radio=1'
+            wb.get(chrome_path).open(music_dir)
+        elif 'get lost' or 'exit' in query:
+            speak('OK! Stay Home, Stay Safe')
+            break
