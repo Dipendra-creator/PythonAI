@@ -30,8 +30,8 @@ pip install wikipedia
 ```
 
 ## License & Copyright
-© [Arbaz Khan](https://arbazkhan4712.github.io/Contact.html)
+© [DIPENDRA BHARDWAJ]
 
-Licensed under the [MIT License](License)
+Licensed under the [GLA License](License)
 
 
